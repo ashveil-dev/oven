@@ -1,13 +1,12 @@
 import axios from "@apis/instance";
 
-export async function getMyChatRoomsApi(accessToken : string) {
+export async function getMyChatRoomsApi() {
     try {
         const response = await axios.get(
             "/chatrooms/my",
           {
             headers: {
                     'Content-Type': `application/json`,
-                    Authorization: `Bearer ${accessToken}`,
                 },
           } )
 

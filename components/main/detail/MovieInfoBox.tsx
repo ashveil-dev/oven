@@ -2,7 +2,6 @@ import { getWorkDetailApi, putHeartedApi } from '@apis/work';
 import SplashLayout from '@components/layout/SplashLayout';
 import { BROWN, RED, WHITE } from '@constants/Colors';
 import { FontAwesome } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import globalState from '@states';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useAtom } from 'jotai';
@@ -19,7 +18,6 @@ import {
 
 export default function MovieInfoBox() {
     const router = useRouter();
-    const [token, setToken] = useState('');
     const [isStared, setIsStared] = useState(false);
     const [isHearted, setIsHearted] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -32,16 +30,12 @@ export default function MovieInfoBox() {
     const { workId } = useLocalSearchParams<{ workId: string }>();
 
     useEffect(() => {
-        async function getAccessToken() {
+        async function getWorkDetail() {
             try {
-                const accessToken = await AsyncStorage.getItem("accessToken");
-                if (accessToken === null || accessToken === "") return router.navigate("/auth/LoginScreen");
-
                 setIsSummaryLoading(true);
                 setClickedMovie(workId);
-                setToken(accessToken);
 
-                const { liked, rating } = await getWorkDetailApi(accessToken, workId);
+                const { liked, rating } = await getWorkDetailApi(workId);
                 setIsHearted(liked);
                 setIsStared(rating === null ? true : false)
                 setIsSummaryLoading(false);
@@ -49,13 +43,15 @@ export default function MovieInfoBox() {
                 Alert.alert("Error");
             }
         }
+
+        getWorkDetail();
     }, [workId])
 
     const pressLikedButton = async () => {
         const like = false;
 
         try {
-            const isSuccess = await putHeartedApi(token, workId, like);
+            const isSuccess = await putHeartedApi(workId, like);
             if (isSuccess) setIsHearted(like);
         } catch (e) {
             if (typeof e === "string") {
@@ -64,7 +60,7 @@ export default function MovieInfoBox() {
                 setErrorMessage("알 수 없는 오류가 발생했습니다.");
             }
         }
-    } 
+    }
 
     return (
         <>
@@ -75,7 +71,7 @@ export default function MovieInfoBox() {
                     <View style={styles.titleContainer}>
                         <Text style={styles.title}>{detailMovie?.titleKr || detailMovie?.titleEng || ''}</Text>
                     </View>
-                    <Image style={styles.moviePoster} src={detailMovie?.poster || null} />
+                    <Image style={styles.moviePoster} src={detailMovie?.poster} />
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity style={styles.columns} onPress={() => setIsModalOpened(true)}>
                             {isStared ? (
@@ -98,25 +94,19 @@ export default function MovieInfoBox() {
                         <View style={styles.textContainer}>
                             <Text style={styles.tab}>
                                 장르:{' '}
-                                {detailMovie && detailMovie.genre ? detailMovie.genre : ''}
+                                {detailMovie?.genre ?? ""}
                             </Text>
                             <Text style={styles.tab}>
                                 출연:{' '}
-                                {detailMovie && detailMovie.actor ? detailMovie.actor : ''}
+                                {detailMovie?.actor ?? ""}
                             </Text>
                             <Text style={styles.tab}>
                                 감독:{' '}
-                                {detailMovie && detailMovie.director
-                                    ? detailMovie.director
-                                    : ''}
+                                {detailMovie?.director ?? ""}
                             </Text>
                             <Text style={styles.tab}>
                                 OTT:{' '}
-                                {(detailMovie &&
-                                    detailMovie.providerList
-                                        ?.map((provider) => provider.name)
-                                        .join(', ')) ||
-                                    ''}
+                                {(detailMovie.providerList?.map((provider) => provider.name).join(', ')) ?? ""}
                             </Text>
                         </View>
                     </View>

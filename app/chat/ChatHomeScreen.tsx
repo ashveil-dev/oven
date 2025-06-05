@@ -2,7 +2,6 @@ import { getMyChatRoomsApi } from '@apis/chat';
 import ChatRoomButton from '@components/chat/ChatRoomButtom';
 import MainLayout from '@components/layout/MainLayout';
 import { BROWN } from '@constants/Colors';
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from '@react-navigation/native';
 import globalState from '@states';
 import { useRouter } from 'expo-router';
@@ -34,15 +33,9 @@ export default function ChatHomeScreen() {
     const isFocused = useIsFocused();
 
     useEffect(() => {
-        async function getAccessToken() {
+        async function getMyChatRooms() {
             try {
-                const accessToken = await AsyncStorage.getItem("accessToken");
-                if (accessToken === null) {
-                    // router.navigate("/LoginScreen");
-                    return;
-                }
-
-                const data = await getMyChatRoomsApi(accessToken);
+                const data = await getMyChatRoomsApi();
                 setMyChatRooms(data);
             } catch (e) {
                 if (typeof e === "string") setErrorMessage(e as string);
@@ -50,8 +43,8 @@ export default function ChatHomeScreen() {
             }
         }
 
-        getAccessToken();
-    }, [AsyncStorage, router])
+        getMyChatRooms();
+    }, [router])
 
     return (
         <MainLayout>

@@ -1,12 +1,11 @@
+import { default as MovieInfoBox, default as MovieInfoText } from "@components/main/detail/MovieInfoBox";
+import RatingModal from "@components/main/detail/RatingModal";
 import { BEIGE } from "@constants/Colors";
 import globalState from "@states";
 import { useAtom } from "jotai";
 import React from 'react';
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import MovieInfoBox from '../../components/Main/DetailScreen/MovieInfoBox';
-import MovieInfoText from '../../components/Main/DetailScreen/MovieInfoText';
-import RatingModal from '../../components/Main/DetailScreen/RatingModal';
 
 const DetailScreen = () => {
     const [isModalOpened] = useAtom(globalState.isModal);

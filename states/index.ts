@@ -4,10 +4,11 @@ import { ImageSourcePropType } from "react-native";
 export default {
   isModal : atom(false),
   isLogin : atom(false),
+  isStared : atom(false),
   isSignupModal : atom(false),
   isSummaryLoading : atom(false),
   userId : atom(""),
-  rating : atom(null),
+  rating : atom<number>(0),
   nickname : atom("000"),
   authWork : atom<{workId : number, poster? : ImageSourcePropType, title : string}[]>([
     {
@@ -27,7 +28,17 @@ export default {
     }
   ]),
   lastWorkId : atom(null),
-  detailMovie : atom([]),
+  detailMovie : atom<{
+    poster? : string,
+    genre? : string,
+    actor? : string,
+    director? : string,
+    titleKr? : string,
+    titleEng? : string,
+    providerList? : {
+      name : string,
+    }[]
+  }>({}),
   clickedOtt : atom(null),
   clickedWork : atom<string>(""),
   selectedWork : atom<number[]>([]),

@@ -90,7 +90,7 @@ export default function RegisterScreen() {
             setId("");
             setPassword("");
             setPasswordConfirm("");
-            router.navigate("/LoginScreen");
+            router.navigate("/auth/LoginScreen");
         } catch (e) {
             setErrorMessage(e as string);
         }

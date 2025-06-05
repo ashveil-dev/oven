@@ -77,7 +77,7 @@ export default function LoginScreen() {
                 </View>)
             }
             <AuthButton text="로그인" onPress={login} />
-            <Link href="/RegisterScreen" asChild>
+            <Link href="/auth/RegisterScreen" asChild>
                 <Pressable style={styles.button}>
                     <Text style={styles.text}>회원가입 하기</Text>
                 </Pressable>

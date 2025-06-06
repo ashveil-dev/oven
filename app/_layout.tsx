@@ -22,10 +22,12 @@ export default function RootLayout() {
     <Provider>
       <ThemeProvider value={DefaultTheme}>
         <Stack>
-          {/* <Stack.Screen name="LoginScreen" /> */}
-          {/* <Stack.Screen name="RegisterScreen" /> */}
+          {/* <Stack.Screen name="auth/LoginScreen" /> */}
+          {/* <Stack.Screen name="auth/RegisterScreen" /> */}
           {/* <Stack.Screen name="chat/ChatHomeScreen" /> */}
-          <Stack.Screen name="chat/ChatRoomScreen" />
+          {/* <Stack.Screen name="chat/ChatRoomScreen" /> */}
+          {/* <Stack.Screen name="main/DetailScreen" /> */}
+          <Stack.Screen name="main/HomeScreen" />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
